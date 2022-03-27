@@ -8,6 +8,7 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    ValidationPipe,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, MoreThan, Repository } from 'typeorm';
@@ -55,7 +56,7 @@ export class EventsController {
         });
     }
     @Post()
-    async create(@Body() input: CreateEventDto) {
+    async create(@Body(ValidationPipe) input: CreateEventDto) {
         return await this.repository.save({
             ...input,
             when: new Date(),
