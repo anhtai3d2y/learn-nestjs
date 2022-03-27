@@ -9,7 +9,7 @@ import {
     Post,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, MoreThan, Repository } from 'typeorm';
 import { CreateEventDto } from './create-event.dto';
 import { Event } from './event.entity';
 import { UpdateEventDto } from './update-event.dto';
@@ -28,7 +28,20 @@ export class EventsController {
     @Get('/practice')
     async practice() {
         return await this.repository.find({
-            where: { id: 3 },
+            select: ['id', 'name'],
+            where: [
+                {
+                    id: 3,
+                    when: MoreThan(new Date('2021-02-12T13:00:00')),
+                },
+                {
+                    description: Like('%aaa%'),
+                },
+            ],
+            take: 2,
+            order: {
+                id: 'ASC',
+            },
         });
     }
     @Get(':id')
